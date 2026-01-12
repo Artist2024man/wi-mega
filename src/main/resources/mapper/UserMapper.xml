@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuin.wi_mega.repository.mapper.AppUserMapper">
+
+    <select id="statAccountCountByUserIds" resultType="com.wuin.wi_mega.model.bo.AccountCountBO">
+        SELECT
+        user_id,
+        COUNT(*) AS totalAccountCount,
+        SUM(CASE WHEN strategy_status = 1 THEN 1 ELSE 0 END) AS runningAccountCount
+        FROM app_account WHERE deleted = 0
+        AND user_id IN
+        <foreach collection="userIds" item="userId" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+        GROUP BY user_id
+    </select>
+
+    <select id="statEquitySumByUserIds"
+            parameterType="java.util.List"
+            resultType="com.wuin.wi_mega.model.bo.AccountEquityStatBO">
+        SELECT
+        user_id,
+        SUM(init_equity) AS totalInitEquity,
+        SUM(cur_equity) AS totalCurEquity
+        FROM app_account WHERE deleted = 0
+        AND user_id IN
+        <foreach collection="userIds" item="userId" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+        GROUP BY user_id
+    </select>
+
+
+</mapper>

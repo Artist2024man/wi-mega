@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuin.wi_mega.repository.mapper.AppStrategyExecutionLogMapper">
+
+    <!-- 分页查询执行日志 -->
+    <select id="pageList" resultType="com.wuin.wi_mega.repository.domain.AppStrategyExecutionLogDO">
+        SELECT * FROM app_strategy_execution_log
+        <where>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="accountId != null">
+                AND account_id = #{accountId}
+            </if>
+            <if test="sessionId != null">
+                AND session_id = #{sessionId}
+            </if>
+            <if test="strategyInstanceId != null">
+                AND strategy_instance_id = #{strategyInstanceId}
+            </if>
+            <if test="logType != null and logType != ''">
+                AND log_type = #{logType}
+            </if>
+            <if test="logCategory != null and logCategory != ''">
+                AND log_category = #{logCategory}
+            </if>
+            <if test="logLevel != null and logLevel != ''">
+                AND log_level = #{logLevel}
+            </if>
+            <if test="symbol != null and symbol != ''">
+                AND symbol = #{symbol}
+            </if>
+            <if test="startTime != null">
+                AND create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                AND create_time &lt;= #{endTime}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <!-- 统计总数 -->
+    <select id="countByCondition" resultType="long">
+        SELECT COUNT(*) FROM app_strategy_execution_log
+        <where>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="accountId != null">
+                AND account_id = #{accountId}
+            </if>
+            <if test="sessionId != null">
+                AND session_id = #{sessionId}
+            </if>
+            <if test="strategyInstanceId != null">
+                AND strategy_instance_id = #{strategyInstanceId}
+            </if>
+            <if test="logType != null and logType != ''">
+                AND log_type = #{logType}
+            </if>
+            <if test="logCategory != null and logCategory != ''">
+                AND log_category = #{logCategory}
+            </if>
+            <if test="logLevel != null and logLevel != ''">
+                AND log_level = #{logLevel}
+            </if>
+            <if test="symbol != null and symbol != ''">
+                AND symbol = #{symbol}
+            </if>
+            <if test="startTime != null">
+                AND create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                AND create_time &lt;= #{endTime}
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据会话ID查询日志 -->
+    <select id="listBySessionId" resultType="com.wuin.wi_mega.repository.domain.AppStrategyExecutionLogDO">
+        SELECT * FROM app_strategy_execution_log
+        WHERE session_id = #{sessionId}
+        ORDER BY create_time ASC
+    </select>
+
+    <!-- 查询账号最近的日志 -->
+    <select id="listRecentByAccountId" resultType="com.wuin.wi_mega.repository.domain.AppStrategyExecutionLogDO">
+        SELECT * FROM app_strategy_execution_log
+        WHERE account_id = #{accountId}
+        ORDER BY create_time DESC
+            LIMIT #{limit}
+    </select>
+
+    <!-- 清理过期日志 -->
+    <delete id="deleteExpiredLogs">
+        DELETE FROM app_strategy_execution_log
+        WHERE create_time &lt; #{expireTime}
+    </delete>
+
+    <!-- 统计日志数量按类型 -->
+    <select id="countByLogType" resultType="java.util.Map">
+        SELECT log_type as logType, COUNT(*) as count
+        FROM app_strategy_execution_log
+        WHERE account_id = #{accountId}
+        GROUP BY log_type
+    </select>
+
+</mapper>
+

@@ -1,0 +1,40 @@
+server:
+  port: 8887
+spring:
+  application:
+    name: wi-mega
+  profiles:
+    active: @profile.active@
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+  task:
+    execution:
+      pool:
+        queue-capacity: 2048
+        core-size: 32
+        max-size: 128
+  springdoc:
+    api-docs:
+      path: /v3/api-docs
+    packages-to-scan: com.wuin.wi_mega
+knife4j:
+  enable: true
+  basic:
+    enable: false
+    username: wuin
+    password: 123456
+
+binance:
+  symbols:
+    - 'ETHUSDT'
+    - 'ZECUSDT'
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*Mapper.xml
+  configuration:
+    cache-enabled: false
+    use-generated-keys: true
+    map-underscore-to-camel-case: true

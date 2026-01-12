@@ -1,0 +1,25 @@
+spring:
+  jackson:
+    time-zone: America/Los_Angeles
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/wi_mega?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=America/Los_Angeles
+    username: root
+    password: Woshini@88
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 10
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      connection-test-query: SELECT 1
+  data:
+    redis:
+      database: 0
+      host: 170.75.175.152
+      port: 6379
+      password: redis_mGGSHy
+      timeout: 3000
+      connectTimeout: 3000
+      clientName:

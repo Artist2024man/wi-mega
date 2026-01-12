@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wuin.wi_mega.repository.mapper.AppAccountSessionMapper">
+    <select id="listIdBySymbol" resultType="java.lang.Long">
+        SELECT id FROM app_account_session WHERE symbol = #{symbol} AND status IN
+        <foreach collection="statusList" item="stas" open="(" separator="," close=")">
+            #{stas}
+        </foreach>
+        AND deleted = 0;
+    </select>
+
+    <select id="sumAmtByAccount" resultType="com.wuin.wi_mega.model.bo.SessionAmtBO">
+        SELECT
+        max(id) AS maxId,
+        COALESCE(SUM(close_pnl), 0) AS closePnl,
+        COALESCE(SUM(open_fee), 0) AS openFee,
+        COALESCE(SUM(close_fee), 0) AS closeFee
+        FROM app_account_session WHERE deleted = 0 AND account_id = #{accountId}
+        <if test="minCreateTime != null">
+            AND create_time >= #{minCreateTime}
+        </if>
+        <if test="minId != null">
+            AND id > #{minId}
+        </if>
+        <if test="statusList != null">
+            AND status IN
+            <foreach collection="statusList" item="stas" open="(" separator="," close=")">
+                #{stas}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="statByAccount" resultType="com.wuin.wi_mega.model.bo.StrategyStatBO">
+        SELECT
+        COUNT(*) AS totalCount,
+        SUM(CASE WHEN close_pnl > 0 THEN 1 ELSE 0 END) AS winCount,
+        SUM(CASE WHEN close_pnl &lt; 0 THEN 1 ELSE 0 END) AS loseCount,
+        COALESCE(SUM(close_pnl), 0) AS totalPnl,
+        COALESCE(SUM(CASE WHEN close_pnl > 0 THEN close_pnl ELSE 0 END), 0) AS totalProfit,
+        COALESCE(SUM(CASE WHEN close_pnl &lt; 0 THEN ABS(close_pnl) ELSE 0 END), 0) AS totalLoss,
+        COALESCE(MAX(CASE WHEN close_pnl > 0 THEN close_pnl ELSE 0 END), 0) AS maxProfit,
+        COALESCE(MAX(CASE WHEN close_pnl &lt; 0 THEN ABS(close_pnl) ELSE 0 END), 0) AS maxLoss,
+        COALESCE(SUM(open_fee), 0) AS totalOpenFee,
+        COALESCE(SUM(close_fee), 0) AS totalCloseFee
+        FROM app_account_session
+        WHERE deleted = 0
+        AND account_id = #{accountId}
+        <if test="minCreateTime != null">
+            AND create_time >= #{minCreateTime}
+        </if>
+        <if test="statusList != null">
+            AND status IN
+            <foreach collection="statusList" item="stas" open="(" separator="," close=")">
+                #{stas}
+            </foreach>
+        </if>
+    </select>
+</mapper>
