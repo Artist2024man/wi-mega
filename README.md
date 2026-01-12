@@ -1,12 +1,15 @@
 # WI-MEGA 部署文档
 
+> **重要声明**: 该项目仅个人兴趣学习使用，请勿用于商业用途。
+
 ## 项目概述
 
 WI-MEGA 是一个基于 Spring Boot 3.5.6 和 Java 21 的交易策略管理系统，支持币安交易所的自动化交易策略执行。
 
 - **技术栈**: Spring Boot 3.5.6, Java 21, MySQL 8.x, Redis
 - **应用端口**: 8887
-- **API文档**: Knife4j (Swagger)
+- **API文档**: Knife4j (Swagger) (http://ip:8887/doc.html)
+- **配套前端页面**: https://github.com/Artist2024man/demo-mega-web (目前不支持新增用户，要新增只能手动改库后重启服务生效，有需要的可以自己二开)
 
 ## 一、环境要求
 
