@@ -23,9 +23,9 @@ public class SwaggerConfig {
                         .title("MegaAI量化平台接口")
                         .version("1.0")
                         .description("MegaAI后端API能力接口信息展示")
-                        .termsOfService("https://doc.byeing.com")
+                        .termsOfService("http://127.0.0.1")
                         .license(new License().name("Apache 2.0")
-                                .url("https://doc.byeing.com")));
+                                .url("http://127.0.0.1")));
     }
 
 
